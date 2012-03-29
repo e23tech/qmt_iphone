@@ -91,9 +91,9 @@ static const NSUInteger HOTTEST_POST_LABEL_HEIGHT = 24;
 {
     [super viewDidUnload];
     // Release any retained subviews of the main view.
-//    self.pageControl = nil;
-//    self.pageScrollView = nil;
-//    self.hottestPostTitle = nil;
+    self.pageControl = nil;
+    self.pageScrollView = nil;
+    self.hottestPostTitle = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

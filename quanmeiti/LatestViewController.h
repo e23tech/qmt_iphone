@@ -14,10 +14,10 @@
     BOOL pageControlUsed;
 }
 
-@property (retain) UIScrollView *pageScrollView;
-@property (retain) UIPageControl *pageControl;
-@property (retain) UILabel *hottestPostTitle;
-@property (retain) NSMutableArray *hottestPosts;
+@property (nonatomic, retain) UIScrollView *pageScrollView;
+@property (nonatomic, retain) UIPageControl *pageControl;
+@property (nonatomic, retain) UILabel *hottestPostTitle;
+@property (nonatomic, retain) NSMutableArray *hottestPosts;
 @property (retain) NSMutableArray *latestPosts;
 @property (retain) NSMutableArray *hottestImageViews;
 
