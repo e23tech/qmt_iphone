@@ -160,7 +160,7 @@ static const NSUInteger HOTTEST_POST_LABEL_HEIGHT = 24;
     cell.countLabel.text = [post objectForKey:@"visit_nums"];
 
     NSURL *imageUrl = [NSURL URLWithString:[post objectForKey:@"thumbnail"]];
-    [cell.thumbnailView setImageWithURL:imageUrl placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+    [cell.thumbnailView setImageWithURL:imageUrl placeholderImage:[UIImage imageNamed:@"pic_placeholder.png"]];
     
     return cell;
 }
@@ -285,7 +285,7 @@ static const NSUInteger HOTTEST_POST_LABEL_HEIGHT = 24;
     if ((NSNull *)imageView == [NSNull null]) {
         imageView = [[UIImageView alloc] init];
         NSURL *imageUrl = [NSURL URLWithString:[post objectForKey:@"thumbnail"]];
-        [imageView setImageWithURL:imageUrl placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+        [imageView setImageWithURL:imageUrl placeholderImage:[UIImage imageNamed:@"hot_placeholder.png"]];
         
         imageView.userInteractionEnabled = YES;
         UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapHottestImageView:)];
@@ -325,6 +325,29 @@ static const NSUInteger HOTTEST_POST_LABEL_HEIGHT = 24;
     [client fetchHottestAndLatestPosts];
 }
 
+- (void) reloadHottestImageViewsData
+{
+    [hottestImageViews removeAllObjects];
+    for (UIView *view in [pageScrollView subviews]) {
+        [view removeFromSuperview];
+    }
+    
+    for (int i=0; i<hottestPosts.count; i++) {
+        [hottestImageViews addObject:[NSNull null]];
+    }
+    
+    pageControl.currentPage = 0;
+    pageControl.numberOfPages = [hottestPosts count];
+    hottestPostTitle.text = [[hottestPosts objectAtIndex:0] objectForKey:@"title"];
+    
+    NSUInteger imageCount = ([hottestPosts count] > HOTTEST_IMAGES_MAX_COUNT) ? HOTTEST_IMAGES_MAX_COUNT : [hottestPosts count];
+    pageScrollView.contentSize = CGSizeMake(pageScrollView.frame.size.width * imageCount, pageScrollView.frame.size.height);
+    
+    [pageScrollView scrollRectToVisible:CGRectMake(0, 0, pageScrollView.frame.size.width, pageScrollView.frame.size.height) animated:NO];
+    [self loadScrollViewWithPage:0];
+    [self loadScrollViewWithPage:1];
+}
+
 #pragma mark - CDSiteDataApi delegate
 
 - (void) apiClientDidStartedRequest:(CDSiteDataApiClient *)client
@@ -344,25 +367,7 @@ static const NSUInteger HOTTEST_POST_LABEL_HEIGHT = 24;
     if ([hottest count] > 0) {
         self.hottestPosts = hottest;
         
-        [hottestImageViews removeAllObjects];
-        for (UIView *view in [pageScrollView subviews]) {
-            [view removeFromSuperview];
-        }
-        
-        for (int i=0; i<hottestPosts.count; i++) {
-            [hottestImageViews addObject:[NSNull null]];
-        }
-        
-        pageControl.currentPage = 0;
-        pageControl.numberOfPages = [hottestPosts count];
-        hottestPostTitle.text = [[hottestPosts objectAtIndex:0] objectForKey:@"title"];
-        
-        NSUInteger imageCount = ([hottestPosts count] > HOTTEST_IMAGES_MAX_COUNT) ? HOTTEST_IMAGES_MAX_COUNT : [hottestPosts count];
-        pageScrollView.contentSize = CGSizeMake(pageScrollView.frame.size.width * imageCount, pageScrollView.frame.size.height);
-
-        [pageScrollView scrollRectToVisible:CGRectMake(0, 0, pageScrollView.frame.size.width, pageScrollView.frame.size.height) animated:NO];
-        [self loadScrollViewWithPage:0];
-        [self loadScrollViewWithPage:1];
+        [self reloadHottestImageViewsData];
     }
     
     if ([hottest count] == 0 && [latest count] == 0) {

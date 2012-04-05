@@ -1,2 +1,4 @@
 /* Localized versions of Info.plist keys */
 
+CFBundleDisplayName = "掌上舜网";
+CFBundleName = "掌上舜网 - 我们更懂济南";

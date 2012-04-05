@@ -52,6 +52,10 @@
     UIBarButtonItem *rightButtomItem = [[UIBarButtonItem alloc] initWithTitle:@"投稿" style:UIBarButtonItemStyleBordered target:self action:@selector(gotoCreateArticleController:)];
     self.navigationItem.rightBarButtonItem = rightButtomItem;
     [rightButtomItem release];
+    
+    UIBarButtonItem *leftButtomItem = [[UIBarButtonItem alloc] initWithTitle:@"退出" style:UIBarButtonItemStyleBordered target:self action:@selector(userLogout:)];
+    self.navigationItem.leftBarButtonItem = leftButtomItem;
+    [leftButtomItem release];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -193,6 +197,17 @@
     QuickDialogController *loginViewController = [QuickDialogController controllerForRoot:root];
     loginViewController.hidesBottomBarWhenPushed = YES;
     [self presentModalViewController:loginViewController animated:YES];
+}
+
+
+- (void) userLogout:(id)sender
+{
+    [LoginForm removeCacheUserInfo];
+    
+    [self dismissModalViewControllerAnimated:YES];
+    UITabBarController *rootController = (UITabBarController *)[[[UIApplication sharedApplication] keyWindow] rootViewController];
+    [rootController setSelectedIndex:0];
+    
 }
 
 

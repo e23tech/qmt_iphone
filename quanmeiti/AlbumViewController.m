@@ -133,7 +133,7 @@
     imageViewFrame.size.height -= ALBUM_CELL_TITLE_LABEL_HEIGHT;
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:imageViewFrame];
     NSURL *imageUrl = [NSURL URLWithString:[album objectForKey:@"thumbnail"]];
-    [imageView setImageWithURL:imageUrl placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+    [imageView setImageWithURL:imageUrl placeholderImage:[UIImage imageNamed:@"pic_placeholder.png"]];
     [cell.contentView addSubview:imageView];
     
     CGRect titleLabelFrame = CGRectMake(imageView.frame.origin.x, imageView.frame.origin.y + imageView.frame.size.height, imageView.frame.size.width, ALBUM_CELL_TITLE_LABEL_HEIGHT);

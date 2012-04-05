@@ -13,7 +13,7 @@
 
 + (QRootElement *) createMoreSettingRoot
 {
-    NSString *appName = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleName"];
+    NSString *appName = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"];
     
     QRootElement *root = [[[QRootElement alloc] init] autorelease];
     root.controllerName = @"MoreViewController";
@@ -33,30 +33,6 @@
     [root addSection:section1];
     [section1 release];
     
-    /* 
-     * section 2
-     */
-    BOOL userIsLogined = [LoginForm userIsLogined];
-    QSection *section2 = [[QSection alloc] initWithTitle:@"用户"];
-    NSString *username = [LoginForm cacheUserName];
-    if (userIsLogined == NO)
-        username = @"未登录";
-    QLabelElement *userNameLabel = [[QLabelElement alloc] initWithTitle:@"当前用户" Value:username];
-    userNameLabel.key = @"userinfo";
-    if (userIsLogined == NO)
-        userNameLabel.controllerAction = @"gotoLoginController:";
-    [section2 addElement:userNameLabel];
-    [userNameLabel release];
-    
-    if (userIsLogined == YES) {
-        QButtonElement *logoutButton = [[QButtonElement alloc] initWithTitle:@"退出登录"];
-        logoutButton.controllerAction = @"userLogout:";
-        [section2 addElement:logoutButton];
-        [logoutButton release];         
-    }
-
-    [root addSection:section2];
-    [section2 release];
     
     /* 
      * section 3

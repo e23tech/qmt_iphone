@@ -83,9 +83,9 @@
 
 - (void) onCancel:(QButtonElement *)button;
 {
-    [self dismissViewControllerAnimated:YES completion:^{
-        ;
-    }];
+    [self dismissModalViewControllerAnimated:YES];
+    UITabBarController *rootController = (UITabBarController *)[[[UIApplication sharedApplication] keyWindow] rootViewController];
+    [rootController setSelectedIndex:0];
 }
 
 - (void) onLogin:(QButtonElement *)button

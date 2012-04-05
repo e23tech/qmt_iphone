@@ -132,7 +132,7 @@
     imageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
     NSURL *imageUrl = [NSURL URLWithString:[picture objectForKey:@"url"]];
-    [imageView setImageWithURL:imageUrl placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+    [imageView setImageWithURL:imageUrl placeholderImage:[UIImage imageNamed:@"pic_placeholder.png"]];
     
     [cell.contentView addSubview:imageView];
     [imageView release];

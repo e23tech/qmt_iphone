@@ -210,7 +210,7 @@
      */
     LatestViewController *latestController = [[LatestViewController alloc] initWithStyle:UITableViewStylePlain];
     latestController.title = @"最新新闻";
-    UITabBarItem *latestTabbarItem = [[UITabBarItem alloc] initWithTitle:@"最新" image:[UIImage imageNamed:@"duanzi.png"] tag:10];
+    UITabBarItem *latestTabbarItem = [[UITabBarItem alloc] initWithTitle:@"最新" image:[UIImage imageNamed:@"tab_latest.png"] tag:10];
     UINavigationController *navLatestController = [[UINavigationController alloc] initWithRootViewController:latestController];
     navLatestController.tabBarItem = latestTabbarItem;
     [controllers addObject:navLatestController];
@@ -223,20 +223,20 @@
      */
     TopicViewController *topicController = [[TopicViewController alloc] initWithStyle:UITableViewStylePlain];
     topicController.title = @"专题新闻";
-    UITabBarItem *topicTabbarItem = [[UITabBarItem alloc] initWithTitle:@"专题" image:[UIImage imageNamed:@"duanzi.png"] tag:20];
+    UITabBarItem *topicTabbarItem = [[UITabBarItem alloc] initWithTitle:@"专题" image:[UIImage imageNamed:@"tab_topic.png"] tag:20];
     UINavigationController *navTopicController = [[UINavigationController alloc] initWithRootViewController:topicController];
     navTopicController.tabBarItem = topicTabbarItem;
     [controllers addObject:navTopicController];
     [topicController release];
     [navTopicController release];
     [topicTabbarItem release];
-    
+
     /*
      * album 
      */
     AlbumViewController *albumController = [[AlbumViewController alloc] init];
     albumController.title = @"舜网图酷";
-    UITabBarItem *categoryTabbarItem = [[UITabBarItem alloc] initWithTitle:@"图片" image:[UIImage imageNamed:@"duanzi.png"] tag:30];
+    UITabBarItem *categoryTabbarItem = [[UITabBarItem alloc] initWithTitle:@"图片" image:[UIImage imageNamed:@"tab_album.png"] tag:30];
     UINavigationController *navCategoryController = [[UINavigationController alloc] initWithRootViewController:albumController];
     navCategoryController.tabBarItem = categoryTabbarItem;
     [controllers addObject:navCategoryController];
@@ -246,7 +246,7 @@
     
     ArticleListViewController *articleListViewController = [[ArticleListViewController alloc] init];
     articleListViewController.title = @"稿件列表";
-    UITabBarItem *articleListTabbarItem = [[UITabBarItem alloc] initWithTitle:@"投稿" image:[UIImage imageNamed:@"duanzi.png"] tag:999];
+    UITabBarItem *articleListTabbarItem = [[UITabBarItem alloc] initWithTitle:@"投稿" image:[UIImage imageNamed:@"tab_post.png"] tag:999];
     UINavigationController *navArticleController = [[UINavigationController alloc] initWithRootViewController:articleListViewController];
     navArticleController.tabBarItem = articleListTabbarItem;
     [controllers addObject:navArticleController];
@@ -281,23 +281,14 @@
 
 - (void) afterSetupWindow
 {
+    [MobClick startWithAppkey:@"4f66833e5270153a7200002e"];
     [MobClick setCrashReportEnabled:YES];
-    [MobClick setDelegate:self reportPolicy:BATCH];
     [MobClick updateOnlineConfig];
     [MobClick checkUpdate];
     [MobClick setLogEnabled:NO];
 
 }
 
-- (NSString *) appKey
-{
-    return @"4f66833e5270153a7200002e";
-}
-
-- (NSString *)channelId
-{
-    return @"App Store";
-}
 
 @end
 

@@ -2,9 +2,10 @@
 //  MobClick.h
 //  MobClick
 //
-//  Created by Aladdin on 3/25/10.
-//  Copyright 2010 Umeng.com . All rights reserved.
-//  Version 1.6.7 , updated_at 2011-11-10.
+//  Created by Aladdin on 2010-03-25.
+//  Updated by Minghua on 2012-03-27.
+//  Copyright 2010-2012 Umeng.com . All rights reserved.
+//  Version 1.7 , updated_at 2012-03-27.
 
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
@@ -23,6 +24,12 @@ typedef enum {
     id _internal;
 }
 #pragma mark basics
+//开启友盟统计,以BATCH方式发送log.
++ (void)startWithAppkey:(NSString *)appKey;
+// channelId 为nil或@""时,默认会被被当作@"App Store"渠道
++ (void)startWithAppkey:(NSString *)appKey reportPolicy:(ReportPolicy)rp channelId:(NSString *)cid;
+
++ (void)setAppVersion:(NSString *)appVersion;		//自定义app版本信息，如果不设置，默认从CFBundleVersion里取
 + (NSString *)getAgentVersion;  //获取sdk 版本号
 
 /*方法名:
@@ -45,19 +52,24 @@ typedef enum {
 + (void)setLogEnabled:(BOOL)value;
 
 /*方法名:
- *		setDelegate:(id<MobClickDelegate>)delegate
- *		setDelegate:(id<MobClickDelegate>)delegate reportPolicy:(ReportPolicy)rp;
+ *		logPageView:seconds:
  *介绍:
- *		类方法设置MobClick代理，并初始化MobClick实例，请在调用appLaunched方法前，调用本方法
+ *		类方法，记录某个view打开多长时间.
+ *
  *参数说明:
- *		delegate:实现了MobClickDelegate协议的实例
- *		ReportPolicy:发送统计信息的策略设置，有两种可选的发送策略
- *					1.BATCH		:批量发送。每次发送的时机在软件开启的时候进行发送
- *					2.REALTIME	:实时发送。每当有事件（event）产生时，进行发送
+ *      pageName NSString * 类型
+ *      seconds  秒数，int型
+ *
+ *      这个方法记录的信息将在下次启动时发送
+ *
+ *返回值:
+ *      无返回值
+ *
  *文档地址: http://www.umeng.com/doc/home.html#op_con_kfzn/iossdk_syzn
  */
-+ (void)setDelegate:(id <MobClickDelegate>)delegate;
-+ (void)setDelegate:(id <MobClickDelegate>)delegate reportPolicy:(ReportPolicy)rp;
++ (void)logPageView:(NSString *)pageName seconds:(int)seconds;
++ (void)beginLogPageView:(NSString *)pageName;
++ (void)endLogPageView:(NSString *)pageName;
 
 #pragma mark event logs
 /*方法名:
@@ -80,20 +92,18 @@ typedef enum {
 + (void)event:(NSString *)eventId acc:(NSInteger)accumulation;
 + (void)event:(NSString *)eventId label:(NSString *)label acc:(NSInteger)accumulation;
 
-
 #pragma mark feedback Default GUI
-/*方法名:
- *		showFeedback:(UIViewController *)rootViewcontroller
- *介绍:
- *		类方法，弹出一个默认的反馈界面，生成一条反馈记录，并保存到本地缓存
- *参数说明:
- *		rootViewController:会用来弹出presentModalViewController方法来展示反馈界面
- *		请确保rootViewController非空
- *		
- *文档地址: http://www.umeng.com/doc/home.html#op_con_kfzn/iossdk_syzn
- */
-+ (void)showFeedback:(UIViewController *)rootViewController;
+/*方法名:	  	
+  - *    showFeedback:(UIViewController *)rootViewcontroller 	
+  - *介绍:
+  - *    类方法，弹出一个默认的反馈界面，生成一条反馈记录，并保存到本地缓存 	
+  - *参数说明:
+  - *    rootViewController:会用来弹出presentModalViewController方法来展示反馈界面
+  - *    请确保rootViewController非空
+  - *文档地址: http://www.umeng.com/doc/home.html#op_con_kfzn/iossdk_syzn
+  - */
 
++ (void)showFeedback:(UIViewController *)rootViewController;
 
 #pragma mark feedback data api
 /*方法名:
@@ -147,6 +157,8 @@ typedef enum {
  */
 + (void)checkUpdate;
 + (void)checkUpdate:(NSString *)title cancelButtonTitle:(NSString *)cancelTitle otherButtonTitles:(NSString *)otherTitle;
++ (void)checkUpdateWithDelegate:(id)delegate selector:(SEL)callBackSelectorWithDictionary;
+
 
 #pragma mark online config params
 /*方法名:
@@ -190,6 +202,7 @@ typedef enum {
 + (NSString *)getConfigParams:(NSString *)key;
 + (NSDictionary *)getConfigParams;
 
+
 #pragma mark helper
 /*方法名:
  *		isJailbroken
@@ -207,7 +220,24 @@ typedef enum {
 // 类方法，判断你的App是否被破解
 + (BOOL)isPirated;
 
-#pragma mark DEPRECATED methods from version 1.6.7
+#pragma mark DEPRECATED methods from version 1.7
+/*方法名:
+ *		setDelegate:(id<MobClickDelegate>)delegate
+ *		setDelegate:(id<MobClickDelegate>)delegate reportPolicy:(ReportPolicy)rp;
+ *介绍:
+ *      此方法已经被更间接的startWithAppkey:(NSString *)appKey 所取代，建议开发者修改;
+ *      好处是可以完全舍去MobClickDelegate实现，使集成更简单.
+ *		类方法设置MobClick代理，并初始化MobClick实例，请在调用appLaunched方法前，调用本方法
+ *参数说明:
+ *		delegate:实现了MobClickDelegate协议的实例
+ *		ReportPolicy:发送统计信息的策略设置，有两种可选的发送策略
+ *					1.BATCH		:批量发送。每次发送的时机在软件开启的时候进行发送
+ *					2.REALTIME	:实时发送。每当有事件（event）产生时，进行发送
+ *文档地址: http://www.umeng.com/doc/home.html#op_con_kfzn/iossdk_syzn
+ */
++ (void)setDelegate:(id)delegate;
++ (void)setDelegate:(id)delegate reportPolicy:(ReportPolicy)rp;
+
 /*方法名:
  *		appLaunched
  *介绍:
@@ -217,7 +247,6 @@ typedef enum {
  *文档地址: http://www.umeng.com/doc/home.html#op_con_kfzn/iossdk_syzn
  * 此方法在1.6.7及以后的版本中废弃，不再需要手动调用.
  */
-
 + (void)appLaunched;
 /*方法名:
  *		appTerminated
@@ -230,22 +259,23 @@ typedef enum {
  */
 + (void)appTerminated;
 
-
 @end
 
+//此协议的三个方法不再建议使用，建议用新方法代替
+//+ (void)startWithAppkey:(NSString *)appKey reportPolicy:(ReportPolicy)rp channelId:(NSString *)cid;
+//+ (void)checkUpdate:(id)delegate selector:(SEL)callBackSelector;
 @protocol MobClickDelegate <NSObject>
-@required
+@optional
 /*方法名:
  *		- (NSString *)appKey;
  *介绍:
  *		返回Appkey，如果Appkey错误，统计后台不会对log进行记录
  *参数说明:
  *		请确保您的Appkey是从友盟后台注册新App得到的
- *		
+ *
  *文档地址: http://www.umeng.com/doc/home.html#op_con_kfzn/iossdk_syzn
  */
 - (NSString *)appKey;
-@optional
 /*方法名:
  *		- (NSString *)channelId;
  *介绍:

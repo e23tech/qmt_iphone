@@ -72,7 +72,7 @@ static NSUInteger const IMAGE_MAX_COUNT = 3;
     [super viewDidLoad];
     self.title = @"投稿";
 
-    UIBarButtonItem *hideKeyboardButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleBordered target:self action:@selector(hideKeyboard)];
+    UIBarButtonItem *hideKeyboardButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"完成" style:UIBarButtonItemStyleBordered target:self action:@selector(hideKeyboard)];
     self.hideKeyboardButton = hideKeyboardButtonItem;
     [hideKeyboardButtonItem release];
     
@@ -309,43 +309,42 @@ static NSUInteger const IMAGE_MAX_COUNT = 3;
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    [self dismissViewControllerAnimated:YES completion:^{
-        if (picker.sourceType == UIImagePickerControllerSourceTypeCamera) {
-            MTStatusBarOverlay *overlay = [MTStatusBarOverlay sharedOverlay];
-            
-            NSArray *mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeCamera];
-            NSArray *imageMediaTypesOnly = [mediaTypes filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(SELF contains %@)", @"image"]];
-            NSArray *videoMediaTypesOnly = [mediaTypes filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(SELF contains %@)", @"movie"]];
-            if ([imageMediaTypesOnly isEqual:picker.mediaTypes]) {
-                [overlay postImmediateMessage:@"正在保存照片..." animated:YES];
-                UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
-                UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:), nil);
-                [self.navigationItem.rightBarButtonItem setEnabled:NO];
-                NSLog(@"camera photo library");
-            }
-            else if ([videoMediaTypesOnly isEqual:picker.mediaTypes]) {
-                NSString *moviePath = [[info objectForKey: UIImagePickerControllerMediaURL] path];
-                if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(moviePath)) {
-                    [overlay postImmediateMessage:@"正在保存短片..." animated:YES];
-                    UISaveVideoAtPathToSavedPhotosAlbum (moviePath, self, @selector(video:didFinishSavingWithError:contextInfo:), nil);
-                }
-            }
-            else {
-                NSLog(@"no valid media");
-            }
-            
-            NSLog(@"camera");
-        }
-        else if (picker.sourceType == UIImagePickerControllerSourceTypePhotoLibrary) {
-            NSLog(@"photo library");
-            UIImage *pickerImage = [info objectForKey:UIImagePickerControllerOriginalImage];
-            [self afterPickerImage:pickerImage];
-        }
-        else 
-            NSLog(@"other source type:%d", picker.sourceType);
+    [self dismissModalViewControllerAnimated:YES];
+    
+    if (picker.sourceType == UIImagePickerControllerSourceTypeCamera) {
+        MTStatusBarOverlay *overlay = [MTStatusBarOverlay sharedOverlay];
         
-//        NSLog(@"info: %@", info);
-    }];
+        NSArray *mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeCamera];
+        NSArray *imageMediaTypesOnly = [mediaTypes filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(SELF contains %@)", @"image"]];
+        NSArray *videoMediaTypesOnly = [mediaTypes filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(SELF contains %@)", @"movie"]];
+        if ([imageMediaTypesOnly isEqual:picker.mediaTypes]) {
+            [overlay postImmediateMessage:@"正在保存照片..." animated:YES];
+            UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+            UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:), nil);
+            [self.navigationItem.rightBarButtonItem setEnabled:NO];
+            NSLog(@"camera photo library");
+        }
+        else if ([videoMediaTypesOnly isEqual:picker.mediaTypes]) {
+            NSString *moviePath = [[info objectForKey: UIImagePickerControllerMediaURL] path];
+            if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(moviePath)) {
+                [overlay postImmediateMessage:@"正在保存短片..." animated:YES];
+                UISaveVideoAtPathToSavedPhotosAlbum (moviePath, self, @selector(video:didFinishSavingWithError:contextInfo:), nil);
+            }
+        }
+        else {
+            NSLog(@"no valid media");
+        }
+        
+        NSLog(@"camera");
+    }
+    else if (picker.sourceType == UIImagePickerControllerSourceTypePhotoLibrary) {
+        NSLog(@"photo library");
+        UIImage *pickerImage = [info objectForKey:UIImagePickerControllerOriginalImage];
+        [self afterPickerImage:pickerImage];
+    }
+    else 
+        NSLog(@"other source type:%d", picker.sourceType);
+
 }
 
 

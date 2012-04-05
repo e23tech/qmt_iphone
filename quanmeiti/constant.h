@@ -9,6 +9,8 @@
 #ifndef quanmeiti_constant_h
 #define quanmeiti_constant_h
 
+#define APP_STORE_URL @"itms-apps://itunes.apple.com/cn/app/id515203365?mt=8"
+
 static const CGFloat TOOLBAR_HEIGHT = 44.0f;
 static const CGFloat NAVBAR_HEIGHT = 44.0f;
 static const CGFloat STATUEBAR_HEIGHT = 20.0f;

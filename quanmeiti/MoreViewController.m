@@ -9,6 +9,7 @@
 #import "MoreViewController.h"
 #import "TestViewController.h"
 #import "LoginForm.h"
+#import "constant.h"
 
 @interface MoreViewController (Private)
 - (void) userLogout:(QButtonElement *)button;
@@ -57,14 +58,6 @@
     // e.g. self.myOutlet = nil;
 }
 
-- (void) viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    QLabelElement *userNameLabel = (QLabelElement *)[self.root elementWithKey:@"userinfo"];
-    userNameLabel.value = @"test";
-    QButtonElement *logoutButton = (QButtonElement *)[self.root elementWithKey:@"logout"];
-    NSLog(@"%@", logoutButton);
-}
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
@@ -89,9 +82,7 @@
 {
     MFMessageComposeViewController *controller = [[[MFMessageComposeViewController alloc] init] autorelease];
 	if([MFMessageComposeViewController canSendText]) {
-#warning 引处上线要修改成真正的地址
-        NSString *bodyString = @"刚装了个应用很不错，强烈推荐。itms-apps://itunes.apple.com/cn/app//id486268988?mt=8";
-		controller.body = bodyString;
+		controller.body = APP_STORE_URL;
 		controller.messageComposeDelegate = self;
 		[self.view.window.rootViewController presentModalViewController:controller animated:YES];
 	}
@@ -118,9 +109,5 @@
     [testController release];
 }
 
-- (void) userLogout:(QButtonElement *)button
-{
-    [LoginForm removeCacheUserInfo];
-}
 
 @end
